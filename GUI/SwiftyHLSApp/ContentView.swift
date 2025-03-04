@@ -27,7 +27,7 @@ struct ContentView: View {
             }
             .padding()
         }
-        .navigationTitle(Text("Swifty HLS"))
+        .navigationTitle(Text("HLS Beagle"))
         .toolbar {
             Button {
                 showInspector.toggle()
