@@ -14,7 +14,10 @@ The [HMS Beagle](https://en.wikipedia.org/wiki/HMS_Beagle) was the ship that car
 
 ### The Mac App
 If you're looking for a quick and easy way to convert your existing video into adaptive HLS streams, you can use the included Mac app to do just that!
+
+<p align="center">
 <img src="./Docs/hero.png" width="45%" /><img src="./Docs/hero2.png" width="45%" />
+</p>
 
 It's as easy as dragging and dropping your input video and an output folder into the app, then clicking "Convert". The app respects your encoding preferences for audio and video, and will notify you when the conversion is complete.
 
