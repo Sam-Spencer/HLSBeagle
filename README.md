@@ -16,10 +16,13 @@ The [HMS Beagle](https://en.wikipedia.org/wiki/HMS_Beagle) was the ship that car
 If you're looking for a quick and easy way to convert your existing video into adaptive HLS streams, you can use the included Mac app to do just that!
 
 <p align="center">
-<img src="./Docs/hero.png" width="45%" /><img src="./Docs/hero2.png" width="45%" />
+<img src="./Docs/hero.png" width="49%" /><img src="./Docs/hero2.png" width="49%" />
 </p>
 
 It's as easy as dragging and dropping your input video and an output folder into the app, then clicking "Convert". The app respects your encoding preferences for audio and video, and will notify you when the conversion is complete.
+
+#### Minimum Requirements
+Use of the Mac app requires that you're running at least macOS 15.0 and have at least `homebrew` installed on your system (or that you're able to install FFMPEG yourself).
 
 ### The Swift Package
 If you're interested in integrating this Swift wrapper over FFMPEG into your own project, you can use the included Swift Package to do so.
@@ -30,5 +33,11 @@ Just add the following URL as a package dependency in your macOS project:
 https://github.com/Sam-Spencer/HLSBeagle.git
 ```
 
+#### Minimum Requirements
+Use of the Swift Package requires that your project target at least macOS 14.0 and use Swift 6 or later.
+
 ## License
 HLS Beagle is licensed under the MIT License. It does not include a binary distribution of FFMPEG, as there are additional complex licensing hoops to jump through in order to do that. As such, APIs are provided as part of the Swift Package to check for the availability of FFMPEG on your system. Same goes for the Mac app: it will check for an existing install of FFMPEG before any conversions can take place.
+
+## Contributing
+Feel free to open an issue or pull request to report a problem, ask a question, or make a contribution! I'd love to expand this and make it more useful for others.
