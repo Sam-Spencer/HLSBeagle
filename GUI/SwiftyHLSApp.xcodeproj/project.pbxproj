@@ -1,0 +1,594 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A67461612D760CD9002D90CB /* SwiftyHLS in Frameworks */ = {isa = PBXBuildFile; productRef = A67461602D760CD9002D90CB /* SwiftyHLS */; };
+		A67461642D760CFB002D90CB /* SwiftyHLS in Frameworks */ = {isa = PBXBuildFile; productRef = A67461632D760CFB002D90CB /* SwiftyHLS */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A674612E2D760A25002D90CB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A67461142D760A24002D90CB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A674611B2D760A24002D90CB;
+			remoteInfo = SwiftyHLSApp;
+		};
+		A67461382D760A25002D90CB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A67461142D760A24002D90CB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A674611B2D760A24002D90CB;
+			remoteInfo = SwiftyHLSApp;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A635DDC42D7767570063508C /* HLS-Beagle-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "HLS-Beagle-Info.plist"; sourceTree = "<group>"; };
+		A674611C2D760A24002D90CB /* HLS Beagle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HLS Beagle.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A674612D2D760A25002D90CB /* SwiftyHLSAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftyHLSAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A67461372D760A25002D90CB /* SwiftyHLSAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftyHLSAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		A674611E2D760A24002D90CB /* SwiftyHLSApp */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SwiftyHLSApp;
+			sourceTree = "<group>";
+		};
+		A67461302D760A25002D90CB /* SwiftyHLSAppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SwiftyHLSAppTests;
+			sourceTree = "<group>";
+		};
+		A674613A2D760A25002D90CB /* SwiftyHLSAppUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SwiftyHLSAppUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A67461192D760A24002D90CB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A67461642D760CFB002D90CB /* SwiftyHLS in Frameworks */,
+				A67461612D760CD9002D90CB /* SwiftyHLS in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A674612A2D760A25002D90CB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A67461342D760A25002D90CB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A67461132D760A24002D90CB = {
+			isa = PBXGroup;
+			children = (
+				A635DDC42D7767570063508C /* HLS-Beagle-Info.plist */,
+				A674611E2D760A24002D90CB /* SwiftyHLSApp */,
+				A67461302D760A25002D90CB /* SwiftyHLSAppTests */,
+				A674613A2D760A25002D90CB /* SwiftyHLSAppUITests */,
+				A674611D2D760A24002D90CB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A674611D2D760A24002D90CB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A674611C2D760A24002D90CB /* HLS Beagle.app */,
+				A674612D2D760A25002D90CB /* SwiftyHLSAppTests.xctest */,
+				A67461372D760A25002D90CB /* SwiftyHLSAppUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A674611B2D760A24002D90CB /* HLS Beagle */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A67461412D760A25002D90CB /* Build configuration list for PBXNativeTarget "HLS Beagle" */;
+			buildPhases = (
+				A67461182D760A24002D90CB /* Sources */,
+				A67461192D760A24002D90CB /* Frameworks */,
+				A674611A2D760A24002D90CB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				A674611E2D760A24002D90CB /* SwiftyHLSApp */,
+			);
+			name = "HLS Beagle";
+			packageProductDependencies = (
+				A67461602D760CD9002D90CB /* SwiftyHLS */,
+				A67461632D760CFB002D90CB /* SwiftyHLS */,
+			);
+			productName = SwiftyHLSApp;
+			productReference = A674611C2D760A24002D90CB /* HLS Beagle.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A674612C2D760A25002D90CB /* SwiftyHLSAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A67461442D760A25002D90CB /* Build configuration list for PBXNativeTarget "SwiftyHLSAppTests" */;
+			buildPhases = (
+				A67461292D760A25002D90CB /* Sources */,
+				A674612A2D760A25002D90CB /* Frameworks */,
+				A674612B2D760A25002D90CB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A674612F2D760A25002D90CB /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A67461302D760A25002D90CB /* SwiftyHLSAppTests */,
+			);
+			name = SwiftyHLSAppTests;
+			packageProductDependencies = (
+			);
+			productName = SwiftyHLSAppTests;
+			productReference = A674612D2D760A25002D90CB /* SwiftyHLSAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A67461362D760A25002D90CB /* SwiftyHLSAppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A67461472D760A25002D90CB /* Build configuration list for PBXNativeTarget "SwiftyHLSAppUITests" */;
+			buildPhases = (
+				A67461332D760A25002D90CB /* Sources */,
+				A67461342D760A25002D90CB /* Frameworks */,
+				A67461352D760A25002D90CB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A67461392D760A25002D90CB /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A674613A2D760A25002D90CB /* SwiftyHLSAppUITests */,
+			);
+			name = SwiftyHLSAppUITests;
+			packageProductDependencies = (
+			);
+			productName = SwiftyHLSAppUITests;
+			productReference = A67461372D760A25002D90CB /* SwiftyHLSAppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A67461142D760A24002D90CB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					A674611B2D760A24002D90CB = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					A674612C2D760A25002D90CB = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = A674611B2D760A24002D90CB;
+					};
+					A67461362D760A25002D90CB = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = A674611B2D760A24002D90CB;
+					};
+				};
+			};
+			buildConfigurationList = A67461172D760A24002D90CB /* Build configuration list for PBXProject "SwiftyHLSApp" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A67461132D760A24002D90CB;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A67461622D760CFB002D90CB /* XCLocalSwiftPackageReference "../../SwiftyHLS" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = A674611D2D760A24002D90CB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A674611B2D760A24002D90CB /* HLS Beagle */,
+				A674612C2D760A25002D90CB /* SwiftyHLSAppTests */,
+				A67461362D760A25002D90CB /* SwiftyHLSAppUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A674611A2D760A24002D90CB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A674612B2D760A25002D90CB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A67461352D760A25002D90CB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A67461182D760A24002D90CB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A67461292D760A25002D90CB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A67461332D760A25002D90CB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A674612F2D760A25002D90CB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A674611B2D760A24002D90CB /* HLS Beagle */;
+			targetProxy = A674612E2D760A25002D90CB /* PBXContainerItemProxy */;
+		};
+		A67461392D760A25002D90CB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A674611B2D760A24002D90CB /* HLS Beagle */;
+			targetProxy = A67461382D760A25002D90CB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		A674613F2D760A25002D90CB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A67461402D760A25002D90CB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		A67461422D760A25002D90CB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SwiftyHLSApp/SwiftyHLSApp.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"SwiftyHLSApp/Preview Content\"";
+				DEVELOPMENT_TEAM = B4AL58358W;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "HLS-Beagle-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "HLS Beagle";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.video";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "2025 Sam Spencer";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = one.nenos.SwiftyHLSApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A67461432D760A25002D90CB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SwiftyHLSApp/SwiftyHLSApp.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"SwiftyHLSApp/Preview Content\"";
+				DEVELOPMENT_TEAM = B4AL58358W;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "HLS-Beagle-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "HLS Beagle";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.video";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "2025 Sam Spencer";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = one.nenos.SwiftyHLSApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A67461452D760A25002D90CB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B4AL58358W;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = one.nenos.SwiftyHLSAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftyHLSApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SwiftyHLSApp";
+			};
+			name = Debug;
+		};
+		A67461462D760A25002D90CB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B4AL58358W;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = one.nenos.SwiftyHLSAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftyHLSApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SwiftyHLSApp";
+			};
+			name = Release;
+		};
+		A67461482D760A25002D90CB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B4AL58358W;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = one.nenos.SwiftyHLSAppUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = SwiftyHLSApp;
+			};
+			name = Debug;
+		};
+		A67461492D760A25002D90CB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B4AL58358W;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = one.nenos.SwiftyHLSAppUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = SwiftyHLSApp;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A67461172D760A24002D90CB /* Build configuration list for PBXProject "SwiftyHLSApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A674613F2D760A25002D90CB /* Debug */,
+				A67461402D760A25002D90CB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A67461412D760A25002D90CB /* Build configuration list for PBXNativeTarget "HLS Beagle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A67461422D760A25002D90CB /* Debug */,
+				A67461432D760A25002D90CB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A67461442D760A25002D90CB /* Build configuration list for PBXNativeTarget "SwiftyHLSAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A67461452D760A25002D90CB /* Debug */,
+				A67461462D760A25002D90CB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A67461472D760A25002D90CB /* Build configuration list for PBXNativeTarget "SwiftyHLSAppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A67461482D760A25002D90CB /* Debug */,
+				A67461492D760A25002D90CB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		A67461622D760CFB002D90CB /* XCLocalSwiftPackageReference "../../SwiftyHLS" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../SwiftyHLS;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A67461602D760CD9002D90CB /* SwiftyHLS */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftyHLS;
+		};
+		A67461632D760CFB002D90CB /* SwiftyHLS */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftyHLS;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = A67461142D760A24002D90CB /* Project object */;
+}
