@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 90;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -56,26 +56,20 @@
 /* Begin PBXFrameworksBuildPhase section */
 		A67461192D760A24002D90CB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				A67461642D760CFB002D90CB /* SwiftyHLS in Frameworks */,
 				A67461612D760CD9002D90CB /* SwiftyHLS in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A674612A2D760A25002D90CB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A67461342D760A25002D90CB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -114,8 +108,6 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			fileSystemSynchronizedGroups = (
 				A674611E2D760A24002D90CB /* SwiftyHLSApp */,
 			);
@@ -145,8 +137,6 @@
 				A67461302D760A25002D90CB /* SwiftyHLSAppTests */,
 			);
 			name = SwiftyHLSAppTests;
-			packageProductDependencies = (
-			);
 			productName = SwiftyHLSAppTests;
 			productReference = A674612D2D760A25002D90CB /* SwiftyHLSAppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -168,8 +158,6 @@
 				A674613A2D760A25002D90CB /* SwiftyHLSAppUITests */,
 			);
 			name = SwiftyHLSAppUITests;
-			packageProductDependencies = (
-			);
 			productName = SwiftyHLSAppUITests;
 			productReference = A67461372D760A25002D90CB /* SwiftyHLSAppUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -182,7 +170,8 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 2620;
+				ORGANIZATIONNAME = "Sam Spencer";
 				TargetAttributes = {
 					A674611B2D760A24002D90CB = {
 						CreatedOnToolsVersion = 16.2;
@@ -209,7 +198,7 @@
 			packageReferences = (
 				A67461622D760CFB002D90CB /* XCLocalSwiftPackageReference "../../SwiftyHLS" */,
 			);
-			preferredProjectObjectVersion = 77;
+			preferredProjectObjectVersion = 90;
 			productRefGroup = A674611D2D760A24002D90CB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -224,48 +213,36 @@
 /* Begin PBXResourcesBuildPhase section */
 		A674611A2D760A24002D90CB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A674612B2D760A25002D90CB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A67461352D760A25002D90CB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A67461182D760A24002D90CB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A67461292D760A25002D90CB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A67461332D760A25002D90CB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
@@ -283,7 +260,7 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		A674613F2D760A25002D90CB /* Debug */ = {
+		A674613F2D760A25002D90CB /* Debug configuration for PBXProject "SwiftyHLSApp" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -317,7 +294,9 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = B4AL58358W;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -341,12 +320,13 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
-		A67461402D760A25002D90CB /* Release */ = {
+		A67461402D760A25002D90CB /* Release configuration for PBXProject "SwiftyHLSApp" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -380,7 +360,9 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = B4AL58358W;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -397,11 +379,12 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 			};
 			name = Release;
 		};
-		A67461422D760A25002D90CB /* Debug */ = {
+		A67461422D760A25002D90CB /* Debug configuration for PBXNativeTarget "HLS Beagle" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -409,9 +392,9 @@
 				CODE_SIGN_ENTITLEMENTS = SwiftyHLSApp/SwiftyHLSApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftyHLSApp/Preview Content\"";
-				DEVELOPMENT_TEAM = B4AL58358W;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -424,7 +407,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = one.nenos.SwiftyHLSApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -432,7 +415,7 @@
 			};
 			name = Debug;
 		};
-		A67461432D760A25002D90CB /* Release */ = {
+		A67461432D760A25002D90CB /* Release configuration for PBXNativeTarget "HLS Beagle" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -440,9 +423,9 @@
 				CODE_SIGN_ENTITLEMENTS = SwiftyHLSApp/SwiftyHLSApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftyHLSApp/Preview Content\"";
-				DEVELOPMENT_TEAM = B4AL58358W;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -455,7 +438,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = one.nenos.SwiftyHLSApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -463,13 +446,13 @@
 			};
 			name = Release;
 		};
-		A67461452D760A25002D90CB /* Debug */ = {
+		A67461452D760A25002D90CB /* Debug configuration for PBXNativeTarget "SwiftyHLSAppTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = B4AL58358W;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.2;
 				MARKETING_VERSION = 1.0;
@@ -481,13 +464,13 @@
 			};
 			name = Debug;
 		};
-		A67461462D760A25002D90CB /* Release */ = {
+		A67461462D760A25002D90CB /* Release configuration for PBXNativeTarget "SwiftyHLSAppTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = B4AL58358W;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.2;
 				MARKETING_VERSION = 1.0;
@@ -499,12 +482,12 @@
 			};
 			name = Release;
 		};
-		A67461482D760A25002D90CB /* Debug */ = {
+		A67461482D760A25002D90CB /* Debug configuration for PBXNativeTarget "SwiftyHLSAppUITests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = B4AL58358W;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = one.nenos.SwiftyHLSAppUITests;
@@ -515,12 +498,12 @@
 			};
 			name = Debug;
 		};
-		A67461492D760A25002D90CB /* Release */ = {
+		A67461492D760A25002D90CB /* Release configuration for PBXNativeTarget "SwiftyHLSAppUITests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = B4AL58358W;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = one.nenos.SwiftyHLSAppUITests;
@@ -537,37 +520,33 @@
 		A67461172D760A24002D90CB /* Build configuration list for PBXProject "SwiftyHLSApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A674613F2D760A25002D90CB /* Debug */,
-				A67461402D760A25002D90CB /* Release */,
+				A674613F2D760A25002D90CB /* Debug configuration for PBXProject "SwiftyHLSApp" */,
+				A67461402D760A25002D90CB /* Release configuration for PBXProject "SwiftyHLSApp" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		A67461412D760A25002D90CB /* Build configuration list for PBXNativeTarget "HLS Beagle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A67461422D760A25002D90CB /* Debug */,
-				A67461432D760A25002D90CB /* Release */,
+				A67461422D760A25002D90CB /* Debug configuration for PBXNativeTarget "HLS Beagle" */,
+				A67461432D760A25002D90CB /* Release configuration for PBXNativeTarget "HLS Beagle" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		A67461442D760A25002D90CB /* Build configuration list for PBXNativeTarget "SwiftyHLSAppTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A67461452D760A25002D90CB /* Debug */,
-				A67461462D760A25002D90CB /* Release */,
+				A67461452D760A25002D90CB /* Debug configuration for PBXNativeTarget "SwiftyHLSAppTests" */,
+				A67461462D760A25002D90CB /* Release configuration for PBXNativeTarget "SwiftyHLSAppTests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		A67461472D760A25002D90CB /* Build configuration list for PBXNativeTarget "SwiftyHLSAppUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A67461482D760A25002D90CB /* Debug */,
-				A67461492D760A25002D90CB /* Release */,
+				A67461482D760A25002D90CB /* Debug configuration for PBXNativeTarget "SwiftyHLSAppUITests" */,
+				A67461492D760A25002D90CB /* Release configuration for PBXNativeTarget "SwiftyHLSAppUITests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
