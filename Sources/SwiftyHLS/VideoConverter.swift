@@ -127,6 +127,12 @@ public class VideoConverter {
             // Use a slower but more efficient preset
             processArguments.append(contentsOf: ["-preset", options.encodingPreset.ffmpegName])
             
+            // Keyframe alignment for ABR streaming
+            // GOP size of 48 frames (~2s at 24fps) ensures segments align across resolutions
+            processArguments.append(contentsOf: ["-g", "48"])
+            processArguments.append(contentsOf: ["-keyint_min", "48"])
+            processArguments.append(contentsOf: ["-sc_threshold", "0"])
+            
             // Set the bitrate
             processArguments.append(contentsOf: ["-b:v", resolution.bitrate])
             
