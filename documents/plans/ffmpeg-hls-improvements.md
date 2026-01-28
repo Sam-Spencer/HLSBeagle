@@ -124,13 +124,15 @@ Improve `VideoConverter.swift` and related files to follow FFmpeg HLS encoding b
 
 - [x] ~~**3.1 Add maxrate/bufsize for VBV compliance**~~ — *Moved to Phase 1.2*
 
-- [ ] **3.2 Validate hardware encoder functionality**
+- [x] **3.2 Validate hardware encoder functionality** ✓
   - Current check only verifies encoder presence, not that it works
   - Consider test-encoding a small buffer to verify
+  - **Completed**: 2026-01-28
 
-- [ ] **3.3 Add `-movflags +faststart`**
+- [x] **3.3 Add `-movflags +faststart`** ✓
   - Helps with progressive download if segments are large
   - Low priority since HLS segments are typically small
+  - **Completed**: 2026-01-28
 
 ### Phase 4: Testing
 
@@ -189,3 +191,4 @@ CBR/VBV Mode (bitrate-constrained):
 | 2026-01-27 | ✓ Phase 1.3 complete: Fixed encoder detection bug (removed erroneous "ffmpeg" from args) |
 | 2026-01-27 | ✓ Phase 1.2.5-1.2.7 complete: Added HLSQualityPreset enum with user-configurable CRF |
 | 2026-01-28 | ✓ Phase 2.1-2.3 complete: VOD playlist type, independent segments, start_number wiring |
+| 2026-01-28 | ✓ Phase 3.2-3.3 complete: Encoder functional check + `-movflags +faststart` |

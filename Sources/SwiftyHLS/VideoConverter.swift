@@ -168,6 +168,9 @@ public class VideoConverter {
             
             // Keep all segments
             processArguments.append(contentsOf: ["-hls_list_size", "0"])
+
+            // Optimize for progressive playback when muxing
+            processArguments.append(contentsOf: ["-movflags", "+faststart"])
             
             // Segments naming pattern
             processArguments.append(contentsOf: [
@@ -301,6 +304,41 @@ public class VideoConverter {
         
         return false
     }
+
+    /// Validates that an encoder can actually encode a tiny test frame.
+    private static func isFFmpegEncoderFunctional(_ encoder: HLSEncoders) -> Bool {
+        guard let process = try? VideoConverter.ffmpegProcess() else { return false }
+        process.arguments = [
+            "-hide_banner",
+            "-loglevel",
+            "error",
+            "-f",
+            "lavfi",
+            "-i",
+            "color=c=black:s=16x16:d=0.1",
+            "-frames:v",
+            "1",
+            "-c:v",
+            encoder.ffmpegName,
+            "-f",
+            "null",
+            "-"
+        ]
+
+        guard let _ = try? VideoConverter.ffmpegPipe(using: process) else { return false }
+        do {
+            try process.run()
+            process.waitUntilExit()
+            return process.terminationStatus == 0
+        } catch {
+            return false
+        }
+    }
+
+    private static func isFFmpegEncoderSupported(_ encoder: HLSEncoders) -> Bool {
+        guard isFFmpegEncoderAvailable(encoder) else { return false }
+        return isFFmpegEncoderFunctional(encoder)
+    }
     
     /// Determines the best available encoder for the system.
     ///
@@ -315,26 +353,26 @@ public class VideoConverter {
         // Check for HEVC (H.265) Encoders first if preferred
         if encodeFormat == .h265 {
 #if arch(arm64) // Apple Silicon (M1, M2, etc.)
-            if isFFmpegEncoderAvailable(.h265HardwareAccelerated) {
+            if isFFmpegEncoderSupported(.h265HardwareAccelerated) {
                 return .h265HardwareAccelerated
             }
 #elseif arch(x86_64) // Intel Macs
-            if isFFmpegEncoderAvailable(.h265QuickSync) {
+            if isFFmpegEncoderSupported(.h265QuickSync) {
                 return .h265QuickSync
             }
 #endif
-            if isFFmpegEncoderAvailable(.h265SoftwareRenderer) {
+            if isFFmpegEncoderSupported(.h265SoftwareRenderer) {
                 return .h265SoftwareRenderer
             }
         }
         
         // Fallback to H.264 if HEVC isn't available or not preferred
 #if arch(arm64) // Apple Silicon (M1, M2, etc.)
-        if isFFmpegEncoderAvailable(.h264HardwareAccelerated) {
+        if isFFmpegEncoderSupported(.h264HardwareAccelerated) {
             return .h264HardwareAccelerated
         }
 #elseif arch(x86_64) // Intel Macs
-        if isFFmpegEncoderAvailable(.h264QuickSync) {
+        if isFFmpegEncoderSupported(.h264QuickSync) {
             return .h264QuickSync
         }
 #endif
