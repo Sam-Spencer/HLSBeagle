@@ -18,6 +18,10 @@ public enum HLSQualityPreset: String, HLSParameterProtocol, CaseIterable {
     public var id: String {
         rawValue
     }
+
+    public var ffmpegName: String {
+        rawValue
+    }
     
     public var displayName: String {
         switch self {
