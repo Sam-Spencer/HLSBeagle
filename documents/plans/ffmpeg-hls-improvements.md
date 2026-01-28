@@ -55,7 +55,7 @@ Improve `VideoConverter.swift` and related files to follow FFmpeg HLS encoding b
   - File: `VideoConverter.swift`, function `generateResolutionStream()`
   - **Completed**: 2026-01-27
 
-- [ ] **1.2 Fix rate control conflict** (Option C: Capped CRF)
+- [x] **1.2 Fix rate control conflict** (Option C: Capped CRF) ✓
   - **Approach**: Use CRF for quality + VBV (`-maxrate`/`-bufsize`) for bitrate cap
   - Remove `-b:v` (not needed with CRF+VBV)
   - Keep `-crf` (quality-based encoding)
@@ -64,13 +64,13 @@ Improve `VideoConverter.swift` and related files to follow FFmpeg HLS encoding b
   - File: `VideoConverter.swift`, function `generateResolutionStream()`
   
   **Implementation Subtasks:**
-  - [ ] 1.2.1 Update `HLSResolution` to expose numeric bitrate (currently string "3000k")
-  - [ ] 1.2.2 Remove `-b:v` argument from FFmpeg args
-  - [ ] 1.2.3 Add `-maxrate` using resolution's bitrate
-  - [ ] 1.2.4 Add `-bufsize` calculated as 2× maxrate
-  - [ ] 1.2.5 Add new `HLSQualityPreset` enum for user-facing quality levels (see below)
-  - [ ] 1.2.6 Update `HLSParameters` with quality preset option
-  - [ ] 1.2.7 Map quality preset to CRF value in VideoConverter
+  - [x] 1.2.1 Update `HLSResolution` to expose numeric bitrate ✓
+  - [x] 1.2.2 Remove `-b:v` argument from FFmpeg args ✓
+  - [x] 1.2.3 Add `-maxrate` using resolution's bitrate ✓
+  - [x] 1.2.4 Add `-bufsize` calculated as 2× maxrate ✓
+  - [x] 1.2.5 Add new `HLSQualityPreset` enum for user-facing quality levels ✓
+  - [x] 1.2.6 Update `HLSParameters` with quality preset option ✓
+  - [x] 1.2.7 Map quality preset to CRF value in VideoConverter ✓
   
   **User Preference Considerations:**
   
@@ -94,10 +94,11 @@ Improve `VideoConverter.swift` and related files to follow FFmpeg HLS encoding b
   - [ ] Test with hardware encoders (VideoToolbox may handle VBV differently)
   - [ ] Ensure CRF is supported by hardware encoders (fallback to `-b:v` if not)
 
-- [ ] **1.3 Fix encoder detection bug**
+- [x] **1.3 Fix encoder detection bug** ✓
   - Remove erroneous `"ffmpeg"` from `process.arguments`
   - Should be `["-encoders"]` not `["ffmpeg", "-encoders"]`
-  - File: `VideoConverter.swift`, line 272
+  - File: `VideoConverter.swift`, line 279
+  - **Completed**: 2026-01-27
 
 ### Phase 2: HLS Compliance (Medium Priority)
 
@@ -181,3 +182,6 @@ CBR/VBV Mode (bitrate-constrained):
 | 2026-01-27 | Plan created after codebase review |
 | 2026-01-27 | ✓ Phase 1.1 complete: Added keyframe alignment flags to VideoConverter.swift |
 | 2026-01-27 | Updated Phase 1.2 to use Option C (Capped CRF); added subtasks, user preference considerations, and validation checks |
+| 2026-01-27 | ✓ Phase 1.2.1-1.2.4 complete: Replaced `-b:v` with `-maxrate`/`-bufsize` VBV rate control |
+| 2026-01-27 | ✓ Phase 1.3 complete: Fixed encoder detection bug (removed erroneous "ffmpeg" from args) |
+| 2026-01-27 | ✓ Phase 1.2.5-1.2.7 complete: Added HLSQualityPreset enum with user-configurable CRF |

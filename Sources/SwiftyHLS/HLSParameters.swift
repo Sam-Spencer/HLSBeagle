@@ -13,6 +13,7 @@ public struct HLSParameters: Sendable {
     public var preferredEncoder: HLSEncoders?
     public var videoEncodingFormat: HLSVideoEncodingFormat = .h264
     public var encodingPreset: HLSEncodingPreset = .slow // Default preset
+    public var qualityPreset: HLSQualityPreset = .balanced // Default quality
     
     public var audioCodec: HLSAudioCodec = .aac // Default audio codec
     public var audioBitrate: HLSAudioBitrate = .bitrate128k // Default audio bitrate
@@ -23,6 +24,7 @@ public struct HLSParameters: Sendable {
         preferredEncoder: HLSEncoders? = nil,
         videoEncodingFormat: HLSVideoEncodingFormat = .h265,
         encodingPreset: HLSEncodingPreset = .slow,
+        qualityPreset: HLSQualityPreset = .balanced,
         audioCodec: HLSAudioCodec = .aac,
         audioBitrate: HLSAudioBitrate = .bitrate128k
     ) {
@@ -31,6 +33,7 @@ public struct HLSParameters: Sendable {
         self.preferredEncoder = preferredEncoder
         self.videoEncodingFormat = videoEncodingFormat
         self.encodingPreset = encodingPreset
+        self.qualityPreset = qualityPreset
         self.audioCodec = audioCodec
         self.audioBitrate = audioBitrate
     }

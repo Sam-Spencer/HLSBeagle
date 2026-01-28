@@ -133,8 +133,9 @@ public class VideoConverter {
             processArguments.append(contentsOf: ["-keyint_min", "48"])
             processArguments.append(contentsOf: ["-sc_threshold", "0"])
             
-            // Set the bitrate
-            processArguments.append(contentsOf: ["-b:v", resolution.bitrate])
+            // VBV rate control: maxrate caps bitrate, bufsize controls variability
+            processArguments.append(contentsOf: ["-maxrate", "\(resolution.bitrateKbps)k"])
+            processArguments.append(contentsOf: ["-bufsize", "\(resolution.bitrateKbps * 2)k"])
             
             // Size the video
             processArguments.append(contentsOf: [
@@ -142,8 +143,9 @@ public class VideoConverter {
                 "scale=w=\(resolution.width):h=\(resolution.height):force_original_aspect_ratio=decrease"
             ])
             
-            // Higher CRF for H.265 (smaller file size)
-            processArguments.append(contentsOf: ["-crf", options.videoEncodingFormat == .h265 ? "28" : "23"])
+            // CRF value based on quality preset and encoding format
+            let crf = options.videoEncodingFormat == .h265 ? options.qualityPreset.crfH265 : options.qualityPreset.crfH264
+            processArguments.append(contentsOf: ["-crf", "\(crf)"])
             
             // Audio codec
             processArguments.append(contentsOf: ["-c:a", options.audioCodec.ffmpegName])
@@ -236,7 +238,7 @@ public class VideoConverter {
             
             if let res = HLSResolution.resolutions.first(where: { "\($0.height)" == height }) {
                 masterContent += """
-                #EXT-X-STREAM-INF:BANDWIDTH=\(res.bitrate.replacingOccurrences(of: "k", with: "000")),RESOLUTION=\(res.width)x\(res.height)
+                #EXT-X-STREAM-INF:BANDWIDTH=\(res.bitrateKbps * 1000),RESOLUTION=\(res.width)x\(res.height)
                 \(variant)\n
                 """
             }
@@ -275,7 +277,7 @@ public class VideoConverter {
     ///
     private static func isFFmpegEncoderAvailable(_ encoder: HLSEncoders) -> Bool {
         guard let process = try? VideoConverter.ffmpegProcess() else { return false }
-        process.arguments = ["ffmpeg", "-encoders"]
+        process.arguments = ["-encoders"]
         
         guard let pipe = try? VideoConverter.ffmpegPipe(using: process) else { return false }
         do {

@@ -6,7 +6,7 @@
 //  Copyright © 2025 nenos, inc. All rights reserved.
 //
 
-internal typealias Resolution = (width: Int, height: Int, bitrate: String)
+internal typealias Resolution = (width: Int, height: Int, bitrateKbps: Int)
 
 public enum HLSResolution: String, HLSParameterProtocol, Comparable {
     
@@ -45,17 +45,17 @@ public enum HLSResolution: String, HLSParameterProtocol, Comparable {
     internal var resolution: Resolution {
         switch self {
         case .resolution4k:
-            return (3840, 2160, "10000k")
+            return (3840, 2160, 10000)
         case .resolution2k:
-            return (2560, 1440, "5000k")
+            return (2560, 1440, 5000)
         case .resolution1080p:
-            return (1920, 1080, "3000k")
+            return (1920, 1080, 3000)
         case .resolution720p:
-            return (1280, 720, "1500k")
+            return (1280, 720, 1500)
         case .resolution480p:
-            return (854, 480, "800k")
+            return (854, 480, 800)
         case .resolution240p:
-            return (426, 240, "400k")
+            return (426, 240, 400)
         }
     }
     
