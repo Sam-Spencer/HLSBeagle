@@ -156,8 +156,15 @@ public class VideoConverter {
             // Force HLS format
             processArguments.append(contentsOf: ["-f", "hls"])
             
+            // Mark playlists as VOD and ensure segments start with keyframes
+            processArguments.append(contentsOf: ["-hls_playlist_type", "vod"])
+            processArguments.append(contentsOf: ["-hls_flags", "independent_segments"])
+
             // Segment duration in seconds
             processArguments.append(contentsOf: ["-hls_time", "\(options.targetDuration)"])
+
+            // Start segment numbering at the configured value
+            processArguments.append(contentsOf: ["-start_number", "\(options.startNumber)"])
             
             // Keep all segments
             processArguments.append(contentsOf: ["-hls_list_size", "0"])

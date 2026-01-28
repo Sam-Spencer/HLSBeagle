@@ -102,20 +102,23 @@ Improve `VideoConverter.swift` and related files to follow FFmpeg HLS encoding b
 
 ### Phase 2: HLS Compliance (Medium Priority)
 
-- [ ] **2.1 Add VOD playlist type**
+- [x] **2.1 Add VOD playlist type** ✓
   - Add `-hls_playlist_type vod` to FFmpeg args
   - Ensures proper `#EXT-X-PLAYLIST-TYPE:VOD` and `#EXT-X-ENDLIST` tags
   - File: `VideoConverter.swift`, function `generateResolutionStream()`
+  - **Completed**: 2026-01-28
 
-- [ ] **2.2 Add independent segments flag**
+- [x] **2.2 Add independent segments flag** ✓
   - Add `-hls_flags independent_segments` to FFmpeg args
   - Indicates segments start with keyframes
   - File: `VideoConverter.swift`, function `generateResolutionStream()`
+  - **Completed**: 2026-01-28
 
-- [ ] **2.3 Apply startNumber parameter**
+- [x] **2.3 Apply startNumber parameter** ✓
   - Wire up `HLSParameters.startNumber` to `-start_number` FFmpeg arg
   - Currently defined but never used
   - Files: `VideoConverter.swift`, `HLSParameters.swift`
+  - **Completed**: 2026-01-28
 
 ### Phase 3: Quality & Robustness (Lower Priority)
 
@@ -185,3 +188,4 @@ CBR/VBV Mode (bitrate-constrained):
 | 2026-01-27 | ✓ Phase 1.2.1-1.2.4 complete: Replaced `-b:v` with `-maxrate`/`-bufsize` VBV rate control |
 | 2026-01-27 | ✓ Phase 1.3 complete: Fixed encoder detection bug (removed erroneous "ffmpeg" from args) |
 | 2026-01-27 | ✓ Phase 1.2.5-1.2.7 complete: Added HLSQualityPreset enum with user-configurable CRF |
+| 2026-01-28 | ✓ Phase 2.1-2.3 complete: VOD playlist type, independent segments, start_number wiring |
