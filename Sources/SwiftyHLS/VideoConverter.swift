@@ -101,6 +101,83 @@ public class VideoConverter {
             }
         }
     }
+
+    internal static func buildFFmpegArguments(
+        inputPath: String,
+        outputDirectory: URL,
+        resolution: Resolution,
+        encoder: HLSEncoders,
+        options: HLSParameters
+    ) -> [String] {
+        let variantFileName = "variant_\(resolution.height)p.m3u8"
+        let variantOutputFile = outputDirectory.appendingPathComponent(variantFileName).path
+        var processArguments: [String] = []
+
+        // Input file
+        processArguments.append(contentsOf: ["-i", inputPath])
+
+        // Encode video with H.264 or H.265
+        processArguments.append(contentsOf: ["-c:v", encoder.ffmpegName])
+
+        // Use a slower but more efficient preset
+        processArguments.append(contentsOf: ["-preset", options.encodingPreset.ffmpegName])
+
+        // Keyframe alignment for ABR streaming
+        // GOP size of 48 frames (~2s at 24fps) ensures segments align across resolutions
+        processArguments.append(contentsOf: ["-g", "48"])
+        processArguments.append(contentsOf: ["-keyint_min", "48"])
+        processArguments.append(contentsOf: ["-sc_threshold", "0"])
+
+        // VBV rate control: maxrate caps bitrate, bufsize controls variability
+        processArguments.append(contentsOf: ["-maxrate", "\(resolution.bitrateKbps)k"])
+        processArguments.append(contentsOf: ["-bufsize", "\(resolution.bitrateKbps * 2)k"])
+
+        // Size the video
+        processArguments.append(contentsOf: [
+            "-vf",
+            "scale=w=\(resolution.width):h=\(resolution.height):force_original_aspect_ratio=decrease"
+        ])
+
+        // CRF value based on quality preset and encoding format
+        let crf = options.videoEncodingFormat == .h265 ? options.qualityPreset.crfH265 : options.qualityPreset.crfH264
+        processArguments.append(contentsOf: ["-crf", "\(crf)"])
+
+        // Audio codec
+        processArguments.append(contentsOf: ["-c:a", options.audioCodec.ffmpegName])
+
+        // Audio bitrate
+        processArguments.append(contentsOf: ["-b:a", options.audioBitrate.ffmpegName])
+
+        // Force HLS format
+        processArguments.append(contentsOf: ["-f", "hls"])
+
+        // Mark playlists as VOD and ensure segments start with keyframes
+        processArguments.append(contentsOf: ["-hls_playlist_type", "vod"])
+        processArguments.append(contentsOf: ["-hls_flags", "independent_segments"])
+
+        // Segment duration in seconds
+        processArguments.append(contentsOf: ["-hls_time", "\(options.targetDuration)"])
+
+        // Start segment numbering at the configured value
+        processArguments.append(contentsOf: ["-start_number", "\(options.startNumber)"])
+
+        // Keep all segments
+        processArguments.append(contentsOf: ["-hls_list_size", "0"])
+
+        // Optimize for progressive playback when muxing
+        processArguments.append(contentsOf: ["-movflags", "+faststart"])
+
+        // Segments naming pattern
+        processArguments.append(contentsOf: [
+            "-hls_segment_filename",
+            outputDirectory.appendingPathComponent("segment_\(resolution.height)p_%03d.ts").path
+        ])
+
+        // Output .m3u8 playlist
+        processArguments.append(contentsOf: [variantOutputFile])
+
+        return processArguments
+    }
     
     private static func generateResolutionStream(
         from resolution: Resolution,
@@ -112,74 +189,14 @@ public class VideoConverter {
         continuation: AsyncStream<ConversionProgress>.Continuation
     ) async {
         do {
-            let variantFileName = "variant_\(resolution.height)p.m3u8"
-            let variantOutputFile = outputDirectory.appendingPathComponent(variantFileName).path
-            
             let process = try VideoConverter.ffmpegProcess()
-            var processArguments: [String] = []
-            
-            // Input file
-            processArguments.append(contentsOf: ["-i", inputPath])
-            
-            // Encode video with H.264 or H.265
-            processArguments.append(contentsOf: ["-c:v", encoder.ffmpegName])
-            
-            // Use a slower but more efficient preset
-            processArguments.append(contentsOf: ["-preset", options.encodingPreset.ffmpegName])
-            
-            // Keyframe alignment for ABR streaming
-            // GOP size of 48 frames (~2s at 24fps) ensures segments align across resolutions
-            processArguments.append(contentsOf: ["-g", "48"])
-            processArguments.append(contentsOf: ["-keyint_min", "48"])
-            processArguments.append(contentsOf: ["-sc_threshold", "0"])
-            
-            // VBV rate control: maxrate caps bitrate, bufsize controls variability
-            processArguments.append(contentsOf: ["-maxrate", "\(resolution.bitrateKbps)k"])
-            processArguments.append(contentsOf: ["-bufsize", "\(resolution.bitrateKbps * 2)k"])
-            
-            // Size the video
-            processArguments.append(contentsOf: [
-                "-vf",
-                "scale=w=\(resolution.width):h=\(resolution.height):force_original_aspect_ratio=decrease"
-            ])
-            
-            // CRF value based on quality preset and encoding format
-            let crf = options.videoEncodingFormat == .h265 ? options.qualityPreset.crfH265 : options.qualityPreset.crfH264
-            processArguments.append(contentsOf: ["-crf", "\(crf)"])
-            
-            // Audio codec
-            processArguments.append(contentsOf: ["-c:a", options.audioCodec.ffmpegName])
-            
-            // Audio bitrate
-            processArguments.append(contentsOf: ["-b:a", options.audioBitrate.ffmpegName])
-            
-            // Force HLS format
-            processArguments.append(contentsOf: ["-f", "hls"])
-            
-            // Mark playlists as VOD and ensure segments start with keyframes
-            processArguments.append(contentsOf: ["-hls_playlist_type", "vod"])
-            processArguments.append(contentsOf: ["-hls_flags", "independent_segments"])
-
-            // Segment duration in seconds
-            processArguments.append(contentsOf: ["-hls_time", "\(options.targetDuration)"])
-
-            // Start segment numbering at the configured value
-            processArguments.append(contentsOf: ["-start_number", "\(options.startNumber)"])
-            
-            // Keep all segments
-            processArguments.append(contentsOf: ["-hls_list_size", "0"])
-
-            // Optimize for progressive playback when muxing
-            processArguments.append(contentsOf: ["-movflags", "+faststart"])
-            
-            // Segments naming pattern
-            processArguments.append(contentsOf: [
-                "-hls_segment_filename",
-                outputDirectory.appendingPathComponent("segment_\(resolution.height)p_%03d.ts").path
-            ])
-            
-            // Output .m3u8 playlist
-            processArguments.append(contentsOf: [variantOutputFile])
+            let processArguments = buildFFmpegArguments(
+                inputPath: inputPath,
+                outputDirectory: outputDirectory,
+                resolution: resolution,
+                encoder: encoder,
+                options: options
+            )
             
             // Finalize the process arguments and create the pipe
             process.arguments = processArguments
@@ -344,7 +361,8 @@ public class VideoConverter {
     ///
     private static func bestAvailableEncoder(
         preferredEncoder: HLSEncoders?,
-        encodeFormat: HLSVideoEncodingFormat
+        encodeFormat: HLSVideoEncodingFormat,
+        encoderSupported: (HLSEncoders) -> Bool = isFFmpegEncoderSupported
     ) -> HLSEncoders {
         if let userPreferred = preferredEncoder {
             return userPreferred // Use the user-defined encoder if set
@@ -353,33 +371,47 @@ public class VideoConverter {
         // Check for HEVC (H.265) Encoders first if preferred
         if encodeFormat == .h265 {
 #if arch(arm64) // Apple Silicon (M1, M2, etc.)
-            if isFFmpegEncoderSupported(.h265HardwareAccelerated) {
+            if encoderSupported(.h265HardwareAccelerated) {
                 return .h265HardwareAccelerated
             }
 #elseif arch(x86_64) // Intel Macs
-            if isFFmpegEncoderSupported(.h265QuickSync) {
+            if encoderSupported(.h265QuickSync) {
                 return .h265QuickSync
             }
 #endif
-            if isFFmpegEncoderSupported(.h265SoftwareRenderer) {
+            if encoderSupported(.h265SoftwareRenderer) {
                 return .h265SoftwareRenderer
             }
         }
         
         // Fallback to H.264 if HEVC isn't available or not preferred
 #if arch(arm64) // Apple Silicon (M1, M2, etc.)
-        if isFFmpegEncoderSupported(.h264HardwareAccelerated) {
+        if encoderSupported(.h264HardwareAccelerated) {
             return .h264HardwareAccelerated
         }
 #elseif arch(x86_64) // Intel Macs
-        if isFFmpegEncoderSupported(.h264QuickSync) {
+        if encoderSupported(.h264QuickSync) {
             return .h264QuickSync
         }
 #endif
         
         return .h264SoftwareRenderer // Fallback to software encoding
     }
-    
+
+    // MARK: - Testing Support
+
+    internal static func bestAvailableEncoderForTesting(
+        preferredEncoder: HLSEncoders?,
+        encodeFormat: HLSVideoEncodingFormat,
+        encoderSupported: (HLSEncoders) -> Bool
+    ) -> HLSEncoders {
+        bestAvailableEncoder(
+            preferredEncoder: preferredEncoder,
+            encodeFormat: encodeFormat,
+            encoderSupported: encoderSupported
+        )
+    }
+
     // MARK: - Cleanup
     
     public static func cleanup(outputDirectory: String, finished: @escaping () -> Void) {

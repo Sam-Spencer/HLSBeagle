@@ -136,13 +136,15 @@ Improve `VideoConverter.swift` and related files to follow FFmpeg HLS encoding b
 
 ### Phase 4: Testing
 
-- [ ] **4.1 Add unit test for FFmpeg argument generation**
+- [x] **4.1 Add unit test for FFmpeg argument generation** ✓
   - Verify correct flags are present
   - Verify no conflicting flags
+  - **Completed**: 2026-01-28
 
-- [ ] **4.2 Add integration test for encoder detection**
+- [x] **4.2 Add integration test for encoder detection** ✓
   - Mock or stub FFmpeg output
   - Verify correct encoder selection
+  - **Completed**: 2026-01-28
 
 ---
 
@@ -192,3 +194,4 @@ CBR/VBV Mode (bitrate-constrained):
 | 2026-01-27 | ✓ Phase 1.2.5-1.2.7 complete: Added HLSQualityPreset enum with user-configurable CRF |
 | 2026-01-28 | ✓ Phase 2.1-2.3 complete: VOD playlist type, independent segments, start_number wiring |
 | 2026-01-28 | ✓ Phase 3.2-3.3 complete: Encoder functional check + `-movflags +faststart` |
+| 2026-01-28 | ✓ Phase 4 complete: Added tests for FFmpeg args + encoder selection |
