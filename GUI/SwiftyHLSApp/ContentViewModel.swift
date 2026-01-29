@@ -57,6 +57,7 @@ final class ContentViewModel {
     var readyToConvert: Bool = false
     var conversionInProgress: Bool = false
     var conversionProgress: [HLSResolution: Double] = [:]
+    var thumbnailProgress: Double = 0
     var totalVideoDuration: Double = 0
     var showConversionProgress: Bool = false
     var conversionStatus: [ConversionStatus] = []
@@ -101,6 +102,7 @@ final class ContentViewModel {
     ///
     func resetConversionState() {
         conversionProgress = [:]
+        thumbnailProgress = 0
         conversionStatus = []
         showCompletedMessage = false
         showCleanupPrompt = false
@@ -301,15 +303,28 @@ final class ContentViewModel {
             let preferredEncoder = HLSVideoEncodingFormat(rawValue: defaults.string(forKey: "encodingFormat") ?? "h264") ?? HLSVideoEncodingFormat.h264
             let encodingProcess = HLSEncoders(rawValue: defaults.string(forKey: "encodingProcess") ?? "h264_videotoolbox") ?? HLSEncoders.h264HardwareAccelerated
             let encodingSpeed = HLSEncodingPreset(rawValue: defaults.string(forKey: "encodingSpeed") ?? "slow") ?? HLSEncodingPreset.slow
+            let encodingQuality = HLSQualityPreset(rawValue: defaults.string(forKey: "encodingQuality") ?? "balanced") ?? HLSQualityPreset.balanced
             let audioCodec = HLSAudioCodec(rawValue: defaults.string(forKey: "audioCodec") ?? "aac") ?? HLSAudioCodec.aac
             let audioBitrate = HLSAudioBitrate(rawValue: defaults.string(forKey: "audioBitrate") ?? "128k") ?? HLSAudioBitrate.bitrate128k
+            
+            // Thumbnail options
+            let thumbnailsEnabled = defaults.bool(forKey: "thumbnailsEnabled")
+            let thumbnailOptions: HLSThumbnailOptions? = thumbnailsEnabled ? HLSThumbnailOptions(
+                enabled: true,
+                interval: HLSThumbnailIntervalPreset(rawValue: defaults.string(forKey: "thumbnailInterval") ?? "standard")?.interval ?? 10,
+                width: HLSThumbnailSizePreset(rawValue: defaults.string(forKey: "thumbnailSize") ?? "medium")?.width ?? 320,
+                format: HLSThumbnailFormat(rawValue: defaults.string(forKey: "thumbnailFormat") ?? "jpeg") ?? .jpeg,
+                concurrent: defaults.object(forKey: "thumbnailConcurrent") as? Bool ?? true
+            ) : nil
             
             let options = HLSParameters(
                 preferredEncoder: encodingProcess,
                 videoEncodingFormat: preferredEncoder,
                 encodingPreset: encodingSpeed,
+                qualityPreset: encodingQuality,
                 audioCodec: audioCodec,
-                audioBitrate: audioBitrate
+                audioBitrate: audioBitrate,
+                thumbnailOptions: thumbnailOptions
             )
             
             let excludedResolutions = resolutions
@@ -368,6 +383,39 @@ final class ContentViewModel {
                             message: "An error occurred while converting \(self.inputVideoName ?? "Your video"). \(error.localizedDescription)"
                         )
                         self.showCleanupPrompt = true
+                    }
+                case .thumbnails(let thumbnailUpdate):
+                    await MainActor.run {
+                        switch thumbnailUpdate {
+                        case .started:
+                            self.conversionStatus.insert(
+                                .init(id: "thumbnails-started", message: "Generating thumbnails...", statusType: .info),
+                                at: 0
+                            )
+                        case .extractingFrames(let current, let total):
+                            self.thumbnailProgress = Double(current) / Double(total)
+                        case .assemblingSprite:
+                            self.conversionStatus.insert(
+                                .init(id: "thumbnails-sprite", message: "Assembling sprite sheet...", statusType: .info),
+                                at: 0
+                            )
+                        case .writingVTT:
+                            self.conversionStatus.insert(
+                                .init(id: "thumbnails-vtt", message: "Writing VTT file...", statusType: .info),
+                                at: 0
+                            )
+                        case .completed:
+                            self.thumbnailProgress = 1.0
+                            self.conversionStatus.insert(
+                                .init(id: "thumbnails-complete", message: "Thumbnails generated!", statusType: .success),
+                                at: 0
+                            )
+                        case .failed(let error):
+                            self.conversionStatus.insert(
+                                .init(id: "thumbnails-failed", message: "Thumbnail error: \(error.localizedDescription)", statusType: .error),
+                                at: 0
+                            )
+                        }
                     }
                 }
             }

@@ -15,6 +15,7 @@ enum SwiftyHLSError: Error, LocalizedError {
     case ffmpegExecutionFailed
     case ffmpegExecutionCancelled
     case unableToDetermineResolution
+    case invalidVideoMetadata
     
     var errorDescription: String? {
         switch self {
@@ -30,6 +31,8 @@ enum SwiftyHLSError: Error, LocalizedError {
             return "ffmpeg execution was cancelled."
         case .unableToDetermineResolution:
             return "Unable to determine resolution of input file."
+        case .invalidVideoMetadata:
+            return "Invalid video metadata. Video duration may be too short for thumbnail generation."
         }
     }
 }

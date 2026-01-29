@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum ConversionProgress {
+public enum ConversionProgress: Sendable {
     
     case started
     
@@ -17,6 +17,9 @@ public enum ConversionProgress {
     
     /// Percentage completion (if estimable)
     case progress(progress: Double, resolution: HLSResolution)
+    
+    /// Thumbnail generation progress
+    case thumbnails(ThumbnailProgress)
     
     case completedSuccessfully
     

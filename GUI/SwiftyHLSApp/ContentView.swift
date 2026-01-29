@@ -125,6 +125,19 @@ struct ContentView: View {
                         ProgressView(value: progressPayload.value > 0.99 ? 1 : progressPayload.value, total: 1)
                     }
                 }
+                if viewModel.thumbnailProgress > 0 {
+                    HStack {
+                        if viewModel.thumbnailProgress > 0.99 {
+                            Image(systemName: "checkmark.circle")
+                                .foregroundStyle(Color.green)
+                                .font(.caption)
+                        }
+                        Text("Thumbnails")
+                            .foregroundStyle(Color.secondary)
+                            .font(.caption)
+                        ProgressView(value: viewModel.thumbnailProgress > 0.99 ? 1 : viewModel.thumbnailProgress, total: 1)
+                    }
+                }
             }
         } else {
             Button("Convert \(viewModel.inputVideoName ?? "Video") to HLS") {

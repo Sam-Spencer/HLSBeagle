@@ -70,21 +70,71 @@ public class VideoConverter {
                     
                     continuation.yield(.started)
                     
-                    // Generate streams for each HLS resolution
-                    for resolution in availableResolutions {
-                        await VideoConverter.generateResolutionStream(
-                            from: resolution,
+                    // Check if thumbnails should run concurrently
+                    let thumbnailOptions = options.thumbnailOptions
+                    let shouldGenerateThumbnails = thumbnailOptions?.enabled == true
+                    let runConcurrently = thumbnailOptions?.concurrent ?? true
+                    
+                    if shouldGenerateThumbnails && runConcurrently {
+                        // Run HLS encoding and thumbnail generation in parallel
+                        variantPlaylists = await withTaskGroup(of: [String].self) { group in
+                            // HLS encoding task
+                            group.addTask {
+                                await VideoConverter.generateHLSStreams(
+                                    availableResolutions: availableResolutions,
+                                    inputPath: inputPath,
+                                    outputDirectory: outputDirectory,
+                                    encoder: encoder,
+                                    options: options,
+                                    inputDuration: inputDuration,
+                                    continuation: continuation
+                                )
+                            }
+                            
+                            // Thumbnail generation task (concurrent)
+                            group.addTask {
+                                await VideoConverter.generateThumbnailsIfEnabled(
+                                    inputPath: inputPath,
+                                    outputDirectory: outputDirectory,
+                                    options: thumbnailOptions!,
+                                    videoDuration: inputDuration,
+                                    videoWidth: inputWidth,
+                                    videoHeight: inputHeight,
+                                    continuation: continuation
+                                )
+                                return [] // Thumbnails don't produce variant playlists
+                            }
+                            
+                            // Collect results from HLS task
+                            var playlists: [String] = []
+                            for await result in group {
+                                playlists.append(contentsOf: result)
+                            }
+                            return playlists
+                        }
+                    } else {
+                        // Sequential execution: HLS first, then thumbnails
+                        variantPlaylists = await VideoConverter.generateHLSStreams(
+                            availableResolutions: availableResolutions,
                             inputPath: inputPath,
                             outputDirectory: outputDirectory,
                             encoder: encoder,
                             options: options,
-                            totalDuration: inputDuration,
+                            inputDuration: inputDuration,
                             continuation: continuation
                         )
                         
-                        let variantStream = "variant_\(resolution.height)p.m3u8"
-                        logger.trace("Generated variant stream: \(variantStream)")
-                        variantPlaylists.append(variantStream)
+                        if shouldGenerateThumbnails {
+                            await VideoConverter.generateThumbnailsIfEnabled(
+                                inputPath: inputPath,
+                                outputDirectory: outputDirectory,
+                                options: thumbnailOptions!,
+                                videoDuration: inputDuration,
+                                videoWidth: inputWidth,
+                                videoHeight: inputHeight,
+                                continuation: continuation
+                            )
+                        }
                     }
                     
                     // Create the master playlist (.m3u8)
@@ -273,6 +323,64 @@ public class VideoConverter {
         
         try masterContent.write(toFile: masterPlaylistPath, atomically: true, encoding: .utf8)
         logger.trace("Created master playlist: \(masterPlaylistPath)")
+    }
+    
+    // MARK: - HLS Stream Generation
+    
+    private static func generateHLSStreams(
+        availableResolutions: [Resolution],
+        inputPath: String,
+        outputDirectory: URL,
+        encoder: HLSEncoders,
+        options: HLSParameters,
+        inputDuration: TimeInterval,
+        continuation: AsyncStream<ConversionProgress>.Continuation
+    ) async -> [String] {
+        var variantPlaylists: [String] = []
+        
+        for resolution in availableResolutions {
+            await VideoConverter.generateResolutionStream(
+                from: resolution,
+                inputPath: inputPath,
+                outputDirectory: outputDirectory,
+                encoder: encoder,
+                options: options,
+                totalDuration: inputDuration,
+                continuation: continuation
+            )
+            
+            let variantStream = "variant_\(resolution.height)p.m3u8"
+            logger.trace("Generated variant stream: \(variantStream)")
+            variantPlaylists.append(variantStream)
+        }
+        
+        return variantPlaylists
+    }
+    
+    // MARK: - Thumbnail Generation
+    
+    private static func generateThumbnailsIfEnabled(
+        inputPath: String,
+        outputDirectory: URL,
+        options: HLSThumbnailOptions,
+        videoDuration: TimeInterval,
+        videoWidth: Int,
+        videoHeight: Int,
+        continuation: AsyncStream<ConversionProgress>.Continuation
+    ) async {
+        let generator = ThumbnailGenerator()
+        let thumbnailStream = generator.generateThumbnails(
+            inputPath: inputPath,
+            outputDirectory: outputDirectory,
+            options: options,
+            videoDuration: videoDuration,
+            videoWidth: videoWidth,
+            videoHeight: videoHeight
+        )
+        
+        for await progress in thumbnailStream {
+            continuation.yield(.thumbnails(progress))
+        }
     }
     
     // MARK: - Shell Configuration
