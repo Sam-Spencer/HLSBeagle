@@ -95,6 +95,17 @@ final class ContentViewModel {
         refreshOutputDetails(shouldUpdateDefaults: false)
     }
     
+    // MARK: - State Reset
+    
+    /// Resets conversion-related state for a fresh start.
+    ///
+    func resetConversionState() {
+        conversionProgress = [:]
+        conversionStatus = []
+        showCompletedMessage = false
+        showCleanupPrompt = false
+    }
+    
     // MARK: - File Selection
     
     func handleFileSelection(url: URL) {
@@ -117,6 +128,7 @@ final class ContentViewModel {
     private func handleInputVideoChange(_ videoPath: URL) {
         guard conversionInProgress == false else { return }
         
+        resetConversionState()
         inputVideoName = videoPath.lastPathComponent
         inputVideoType = videoPath.pathExtension
         inputVideoPath = videoPath.path
@@ -149,6 +161,7 @@ final class ContentViewModel {
         panel.canChooseFiles = true
         
         if panel.runModal() == .OK {
+            resetConversionState()
             inputVideoName = panel.url?.lastPathComponent
             inputVideoType = panel.url?.pathExtension
             inputVideoPath = panel.url?.path
@@ -168,6 +181,7 @@ final class ContentViewModel {
             
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
+                self.resetConversionState()
                 self.inputVideoName = url.lastPathComponent
                 self.inputVideoType = url.pathExtension
                 self.inputVideoPath = url.path
@@ -324,10 +338,13 @@ final class ContentViewModel {
                     }
                 case .progress(let progress, let resolution):
                     await MainActor.run {
-                        self.conversionProgress[resolution] = progress / self.totalVideoDuration
+                        self.conversionProgress[resolution] = min(progress / 100.0, 1.0)
                     }
                 case .completedSuccessfully:
                     await MainActor.run {
+                        for resolution in self.conversionProgress.keys {
+                            self.conversionProgress[resolution] = 1.0
+                        }
                         self.showCompletedMessage = true
                         self.conversionStatus.insert(
                             .init(id: "complete", message: "Conversion complete!", statusType: .success),
