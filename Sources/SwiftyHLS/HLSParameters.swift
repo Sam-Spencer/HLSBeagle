@@ -19,6 +19,7 @@ public struct HLSParameters: Sendable {
     public var audioBitrate: HLSAudioBitrate = .bitrate128k // Default audio bitrate
     
     public var thumbnailOptions: HLSThumbnailOptions? // Optional thumbnail generation
+    public var subtitleOptions: HLSSubtitleOptions? // Optional subtitle processing
     
     public init(
         startNumber: Int = 0,
@@ -29,7 +30,8 @@ public struct HLSParameters: Sendable {
         qualityPreset: HLSQualityPreset = .balanced,
         audioCodec: HLSAudioCodec = .aac,
         audioBitrate: HLSAudioBitrate = .bitrate128k,
-        thumbnailOptions: HLSThumbnailOptions? = nil
+        thumbnailOptions: HLSThumbnailOptions? = nil,
+        subtitleOptions: HLSSubtitleOptions? = nil
     ) {
         self.startNumber = startNumber
         self.targetDuration = targetDuration
@@ -40,5 +42,6 @@ public struct HLSParameters: Sendable {
         self.audioCodec = audioCodec
         self.audioBitrate = audioBitrate
         self.thumbnailOptions = thumbnailOptions
+        self.subtitleOptions = subtitleOptions
     }
 }

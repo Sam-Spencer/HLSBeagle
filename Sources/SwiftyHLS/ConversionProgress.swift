@@ -21,6 +21,9 @@ public enum ConversionProgress: Sendable {
     /// Thumbnail generation progress
     case thumbnails(ThumbnailProgress)
     
+    /// Subtitle processing progress
+    case subtitles(SubtitleProgress)
+    
     case completedSuccessfully
     
     case failed(error: Error)

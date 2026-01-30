@@ -8,6 +8,13 @@
 
 import Foundation
 
+/// Internal result type for concurrent task coordination.
+private enum VideoConverterTaskResult: Sendable {
+    case variantPlaylists([String])
+    case subtitleTracks([HLSSubtitleTrack])
+    case thumbnailsComplete
+}
+
 public class VideoConverter {
     
     // MARK: - Conversion
@@ -70,17 +77,27 @@ public class VideoConverter {
                     
                     continuation.yield(.started)
                     
-                    // Check if thumbnails should run concurrently
+                    // Check concurrency options
                     let thumbnailOptions = options.thumbnailOptions
+                    let subtitleOptions = options.subtitleOptions
                     let shouldGenerateThumbnails = thumbnailOptions?.enabled == true
-                    let runConcurrently = thumbnailOptions?.concurrent ?? true
+                    let shouldProcessSubtitles = subtitleOptions?.enabled == true
+                    let runThumbnailsConcurrently = thumbnailOptions?.concurrent ?? true
+                    let runSubtitlesConcurrently = subtitleOptions?.concurrent ?? true
                     
-                    if shouldGenerateThumbnails && runConcurrently {
-                        // Run HLS encoding and thumbnail generation in parallel
-                        variantPlaylists = await withTaskGroup(of: [String].self) { group in
-                            // HLS encoding task
+                    // Track processed subtitle tracks for master playlist
+                    var processedSubtitleTracks: [HLSSubtitleTrack] = []
+                    
+                    // Determine if we need concurrent execution
+                    let hasConcurrentTasks = (shouldGenerateThumbnails && runThumbnailsConcurrently) ||
+                                             (shouldProcessSubtitles && runSubtitlesConcurrently)
+                    
+                    if hasConcurrentTasks {
+                        // Run tasks in parallel using TaskGroup
+                        let results = await withTaskGroup(of: VideoConverterTaskResult.self) { group in
+                            // HLS encoding task (always runs)
                             group.addTask {
-                                await VideoConverter.generateHLSStreams(
+                                let playlists = await VideoConverter.generateHLSStreams(
                                     availableResolutions: availableResolutions,
                                     inputPath: inputPath,
                                     outputDirectory: outputDirectory,
@@ -89,31 +106,83 @@ public class VideoConverter {
                                     inputDuration: inputDuration,
                                     continuation: continuation
                                 )
+                                return .variantPlaylists(playlists)
                             }
                             
                             // Thumbnail generation task (concurrent)
-                            group.addTask {
-                                await VideoConverter.generateThumbnailsIfEnabled(
-                                    inputPath: inputPath,
-                                    outputDirectory: outputDirectory,
-                                    options: thumbnailOptions!,
-                                    videoDuration: inputDuration,
-                                    videoWidth: inputWidth,
-                                    videoHeight: inputHeight,
-                                    continuation: continuation
-                                )
-                                return [] // Thumbnails don't produce variant playlists
+                            if shouldGenerateThumbnails && runThumbnailsConcurrently {
+                                group.addTask {
+                                    await VideoConverter.generateThumbnailsIfEnabled(
+                                        inputPath: inputPath,
+                                        outputDirectory: outputDirectory,
+                                        options: thumbnailOptions!,
+                                        videoDuration: inputDuration,
+                                        videoWidth: inputWidth,
+                                        videoHeight: inputHeight,
+                                        continuation: continuation
+                                    )
+                                    return .thumbnailsComplete
+                                }
                             }
                             
-                            // Collect results from HLS task
-                            var playlists: [String] = []
-                            for await result in group {
-                                playlists.append(contentsOf: result)
+                            // Subtitle processing task (concurrent)
+                            if shouldProcessSubtitles && runSubtitlesConcurrently {
+                                group.addTask {
+                                    let tracks = await VideoConverter.generateSubtitlesIfEnabled(
+                                        inputPath: inputPath,
+                                        outputDirectory: outputDirectory,
+                                        options: subtitleOptions!,
+                                        targetDuration: options.targetDuration,
+                                        continuation: continuation
+                                    )
+                                    return .subtitleTracks(tracks)
+                                }
                             }
-                            return playlists
+                            
+                            // Collect results
+                            var collectedResults: [VideoConverterTaskResult] = []
+                            for await result in group {
+                                collectedResults.append(result)
+                            }
+                            return collectedResults
+                        }
+                        
+                        // Extract results
+                        for result in results {
+                            switch result {
+                            case .variantPlaylists(let playlists):
+                                variantPlaylists = playlists
+                            case .subtitleTracks(let tracks):
+                                processedSubtitleTracks = tracks
+                            case .thumbnailsComplete:
+                                break
+                            }
+                        }
+                        
+                        // Run sequential tasks that weren't concurrent
+                        if shouldGenerateThumbnails && !runThumbnailsConcurrently {
+                            await VideoConverter.generateThumbnailsIfEnabled(
+                                inputPath: inputPath,
+                                outputDirectory: outputDirectory,
+                                options: thumbnailOptions!,
+                                videoDuration: inputDuration,
+                                videoWidth: inputWidth,
+                                videoHeight: inputHeight,
+                                continuation: continuation
+                            )
+                        }
+                        
+                        if shouldProcessSubtitles && !runSubtitlesConcurrently {
+                            processedSubtitleTracks = await VideoConverter.generateSubtitlesIfEnabled(
+                                inputPath: inputPath,
+                                outputDirectory: outputDirectory,
+                                options: subtitleOptions!,
+                                targetDuration: options.targetDuration,
+                                continuation: continuation
+                            )
                         }
                     } else {
-                        // Sequential execution: HLS first, then thumbnails
+                        // Sequential execution: HLS first, then thumbnails, then subtitles
                         variantPlaylists = await VideoConverter.generateHLSStreams(
                             availableResolutions: availableResolutions,
                             inputPath: inputPath,
@@ -135,12 +204,23 @@ public class VideoConverter {
                                 continuation: continuation
                             )
                         }
+                        
+                        if shouldProcessSubtitles {
+                            processedSubtitleTracks = await VideoConverter.generateSubtitlesIfEnabled(
+                                inputPath: inputPath,
+                                outputDirectory: outputDirectory,
+                                options: subtitleOptions!,
+                                targetDuration: options.targetDuration,
+                                continuation: continuation
+                            )
+                        }
                     }
                     
                     // Create the master playlist (.m3u8)
                     try await VideoConverter.createMasterPlaylist(
                         outputDirectory: outputDirectory,
-                        variantPlaylists: variantPlaylists
+                        variantPlaylists: variantPlaylists,
+                        subtitleTracks: processedSubtitleTracks
                     )
                     continuation.yield(.completedSuccessfully)
                     continuation.finish()
@@ -305,19 +385,36 @@ public class VideoConverter {
         return (currentTime / totalDuration) * 100
     }
     
-    private static func createMasterPlaylist(outputDirectory: URL, variantPlaylists: [String]) async throws {
+    private static func createMasterPlaylist(
+        outputDirectory: URL,
+        variantPlaylists: [String],
+        subtitleTracks: [HLSSubtitleTrack] = []
+    ) async throws {
         let masterPlaylistPath = outputDirectory.appendingPathComponent("master.m3u8").path
         var masterContent = "#EXTM3U\n"
         
+        // Add subtitle media entries if present
+        let hasSubtitles = !subtitleTracks.isEmpty
+        if hasSubtitles {
+            for track in subtitleTracks {
+                let defaultAttr = track.isDefault ? "YES" : "NO"
+                let forcedAttr = track.isForced ? "YES" : "NO"
+                masterContent += "#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID=\"subs\",NAME=\"\(track.name)\",LANGUAGE=\"\(track.language)\",DEFAULT=\(defaultAttr),AUTOSELECT=YES,FORCED=\(forcedAttr),URI=\"\(track.playlistFilename)\"\n"
+            }
+            masterContent += "\n"
+        }
+        
+        // Add variant stream entries
         for variant in variantPlaylists {
             let resolution = variant.replacingOccurrences(of: "variant_", with: "").replacingOccurrences(of: ".m3u8", with: "")
             let height = resolution.replacingOccurrences(of: "p", with: "")
             
             if let res = HLSResolution.resolutions.first(where: { "\($0.height)" == height }) {
-                masterContent += """
-                #EXT-X-STREAM-INF:BANDWIDTH=\(res.bitrateKbps * 1000),RESOLUTION=\(res.width)x\(res.height)
-                \(variant)\n
-                """
+                var streamInf = "#EXT-X-STREAM-INF:BANDWIDTH=\(res.bitrateKbps * 1000),RESOLUTION=\(res.width)x\(res.height)"
+                if hasSubtitles {
+                    streamInf += ",SUBTITLES=\"subs\""
+                }
+                masterContent += "\(streamInf)\n\(variant)\n"
             }
         }
         
@@ -381,6 +478,37 @@ public class VideoConverter {
         for await progress in thumbnailStream {
             continuation.yield(.thumbnails(progress))
         }
+    }
+    
+    // MARK: - Subtitle Processing
+    
+    private static func generateSubtitlesIfEnabled(
+        inputPath: String,
+        outputDirectory: URL,
+        options: HLSSubtitleOptions,
+        targetDuration: Double,
+        continuation: AsyncStream<ConversionProgress>.Continuation
+    ) async -> [HLSSubtitleTrack] {
+        let processor = SubtitleProcessor()
+        let subtitleStream = processor.processSubtitles(
+            inputPath: inputPath,
+            outputDirectory: outputDirectory,
+            options: options,
+            targetDuration: targetDuration
+        )
+        
+        var processedTracks: [HLSSubtitleTrack] = []
+        
+        for await progress in subtitleStream {
+            continuation.yield(.subtitles(progress))
+            
+            // Capture completed tracks
+            if case .completed(let tracks) = progress {
+                processedTracks = tracks
+            }
+        }
+        
+        return processedTracks
     }
     
     // MARK: - Shell Configuration

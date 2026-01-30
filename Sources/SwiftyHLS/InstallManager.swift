@@ -77,4 +77,23 @@ public class InstallManager {
         return ""
     }
     
+    /// Finds the correct ffprobe path dynamically
+    internal func ffprobePath() -> String {
+        let potentialPaths = [
+            "/opt/homebrew/bin/ffprobe", // Apple Silicon (M1, M2)
+            "/usr/local/bin/ffprobe",    // Intel Macs
+            "/usr/bin/ffprobe"           // Manual installs
+        ]
+        
+        for path in potentialPaths {
+            if FileManager.default.fileExists(atPath: path) {
+                logger.trace("FFprobe found at: \(path)")
+                return path
+            }
+        }
+        
+        logger.error("FFprobe not found in known locations.")
+        return ""
+    }
+    
 }

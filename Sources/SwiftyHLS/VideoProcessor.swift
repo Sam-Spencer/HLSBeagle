@@ -70,4 +70,93 @@ public struct VideoProcessor {
         }
     }
     
+    // MARK: - Subtitle Detection
+    
+    /// Detects embedded subtitle streams in a video file using ffprobe.
+    ///
+    /// - Parameter inputPath: Path to the source video file.
+    /// - Returns: Array of detected subtitle tracks.
+    public static func getSubtitleStreams(inputPath: String) throws -> [HLSSubtitleTrack] {
+        let installManager = InstallManager()
+        let ffprobePath = installManager.ffprobePath()
+        
+        guard !ffprobePath.isEmpty, FileManager.default.fileExists(atPath: ffprobePath) else {
+            throw SwiftyHLSError.ffmpegNotFound
+        }
+        
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: ffprobePath)
+        process.arguments = [
+            "-v", "error",
+            "-select_streams", "s",
+            "-show_entries", "stream=index,codec_name:stream_tags=language,title",
+            "-of", "json",
+            inputPath
+        ]
+        
+        let pipe = Pipe()
+        process.standardOutput = pipe
+        process.standardError = pipe
+        
+        try process.run()
+        process.waitUntilExit()
+        
+        let outputData = pipe.fileHandleForReading.readDataToEndOfFile()
+        
+        guard process.terminationStatus == 0 else {
+            logger.error("FFprobe failed to detect subtitle streams")
+            return []
+        }
+        
+        return parseSubtitleStreams(from: outputData)
+    }
+    
+    /// Parses ffprobe JSON output into subtitle tracks.
+    private static func parseSubtitleStreams(from data: Data) -> [HLSSubtitleTrack] {
+        struct FFProbeOutput: Decodable {
+            let streams: [FFProbeStream]?
+        }
+        
+        struct FFProbeStream: Decodable {
+            let index: Int
+            let codec_name: String?
+            let tags: FFProbeTags?
+        }
+        
+        struct FFProbeTags: Decodable {
+            let language: String?
+            let title: String?
+        }
+        
+        guard let output = try? JSONDecoder().decode(FFProbeOutput.self, from: data),
+              let streams = output.streams else {
+            logger.trace("No subtitle streams found in ffprobe output")
+            return []
+        }
+        
+        var tracks: [HLSSubtitleTrack] = []
+        
+        for (trackIndex, stream) in streams.enumerated() {
+            let language = stream.tags?.language ?? "und"
+            let title = stream.tags?.title
+            let name = title ?? HLSSubtitleTrack.displayName(for: language)
+            
+            let track = HLSSubtitleTrack(
+                index: stream.index,
+                language: language,
+                name: name,
+                isDefault: trackIndex == 0,
+                isForced: false,
+                source: .embedded,
+                codec: stream.codec_name,
+                sourcePath: nil
+            )
+            
+            tracks.append(track)
+            logger.trace("Detected subtitle stream: index=\(stream.index), lang=\(language), codec=\(stream.codec_name ?? "unknown")")
+        }
+        
+        return tracks
+    }
+    
 }

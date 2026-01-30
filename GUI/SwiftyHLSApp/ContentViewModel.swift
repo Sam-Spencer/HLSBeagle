@@ -66,6 +66,8 @@ final class ContentViewModel {
     var showBadFileFormatAlert: Bool = false
     var showCompletedMessage: Bool = false
     
+    var externalSubtitleFiles: [ExternalSubtitleFile] = []
+    
     init() {
         checkInstallStatus()
         loadFromUserDefaults()
@@ -317,6 +319,26 @@ final class ContentViewModel {
                 concurrent: defaults.object(forKey: "thumbnailConcurrent") as? Bool ?? true
             ) : nil
             
+            // Subtitle options
+            let subtitlesEnabled = defaults.bool(forKey: "subtitlesEnabled")
+            let externalFiles = await MainActor.run {
+                self.externalSubtitleFiles.map { file in
+                    HLSExternalSubtitle(
+                        path: file.path,
+                        language: file.language,
+                        name: file.name,
+                        isForced: file.isForced
+                    )
+                }
+            }
+            let subtitleOptions: HLSSubtitleOptions? = subtitlesEnabled ? HLSSubtitleOptions(
+                enabled: true,
+                extractEmbedded: defaults.object(forKey: "extractEmbedded") as? Bool ?? true,
+                externalFiles: externalFiles,
+                defaultLanguage: nil,
+                concurrent: defaults.object(forKey: "subtitlesConcurrent") as? Bool ?? true
+            ) : nil
+            
             let options = HLSParameters(
                 preferredEncoder: encodingProcess,
                 videoEncodingFormat: preferredEncoder,
@@ -324,7 +346,8 @@ final class ContentViewModel {
                 qualityPreset: encodingQuality,
                 audioCodec: audioCodec,
                 audioBitrate: audioBitrate,
-                thumbnailOptions: thumbnailOptions
+                thumbnailOptions: thumbnailOptions,
+                subtitleOptions: subtitleOptions
             )
             
             let excludedResolutions = resolutions
@@ -413,6 +436,47 @@ final class ContentViewModel {
                         case .failed(let error):
                             self.conversionStatus.insert(
                                 .init(id: "thumbnails-failed", message: "Thumbnail error: \(error.localizedDescription)", statusType: .error),
+                                at: 0
+                            )
+                        }
+                    }
+                case .subtitles(let subtitleUpdate):
+                    await MainActor.run {
+                        switch subtitleUpdate {
+                        case .started:
+                            self.conversionStatus.insert(
+                                .init(id: "subtitles-started", message: "Processing subtitles...", statusType: .info),
+                                at: 0
+                            )
+                        case .detectingStreams:
+                            self.conversionStatus.insert(
+                                .init(id: "subtitles-detecting", message: "Detecting subtitle streams...", statusType: .info),
+                                at: 0
+                            )
+                        case .extracting(let track, let current, let total):
+                            self.conversionStatus.insert(
+                                .init(id: "subtitles-extracting-\(track.language)", message: "Extracting subtitles (\(current)/\(total)): \(track.name)...", statusType: .info),
+                                at: 0
+                            )
+                        case .segmenting(let track):
+                            self.conversionStatus.insert(
+                                .init(id: "subtitles-segmenting-\(track.language)", message: "Segmenting: \(track.name)...", statusType: .info),
+                                at: 0
+                            )
+                        case .writingPlaylist(let track):
+                            self.conversionStatus.insert(
+                                .init(id: "subtitles-playlist-\(track.language)", message: "Writing playlist: \(track.name)...", statusType: .info),
+                                at: 0
+                            )
+                        case .completed(let tracks):
+                            let message = tracks.isEmpty ? "No subtitles found" : "Subtitles processed: \(tracks.count) track(s)"
+                            self.conversionStatus.insert(
+                                .init(id: "subtitles-complete", message: message, statusType: .success),
+                                at: 0
+                            )
+                        case .failed(let error):
+                            self.conversionStatus.insert(
+                                .init(id: "subtitles-failed", message: "Subtitle error: \(error.localizedDescription)", statusType: .error),
                                 at: 0
                             )
                         }

@@ -14,12 +14,14 @@ public struct Inspector: View {
     enum OptionPanel: Int, Hashable, CaseIterable {
         case video
         case audio
+        case subtitles
         case thumbnails
         
         var displayName: String {
             switch self {
             case .video: "Video"
             case .audio: "Audio"
+            case .subtitles: "Subtitles"
             case .thumbnails: "Thumbnails"
             }
         }
@@ -34,6 +36,7 @@ public struct Inspector: View {
             switch optionPanel {
             case .video: InspectorVideo(viewModel: viewModel)
             case .audio: InspectorAudio(viewModel: viewModel)
+            case .subtitles: InspectorSubtitles(viewModel: viewModel)
             case .thumbnails: InspectorThumbnails(viewModel: viewModel)
             }
         }
